@@ -29,12 +29,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @objc func shuffleData() {
         data.shuffle()
-        tableView.performBatchUpdates({
-            let indexPaths = tableView.indexPathsForVisibleRows ?? []
-            for indexPath in indexPaths {
-                tableView.reloadRows(at: [indexPath], with: .automatic)
-            }
-        })
+        tableView.reloadData()
     }
     
     // MARK: - UITableViewDataSource
@@ -43,9 +38,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return data.count
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
-    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         let (number, isChecked) = data[indexPath.row]
@@ -56,14 +48,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // MARK: - UITableViewDelegate
     
-    /*
-     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-     cell.transform = CGAffineTransform(scaleX: 0, y: 0)
-     UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-     cell.transform = CGAffineTransform.identity
-     }, completion: nil)
-     }
-     */
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.transform = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            cell.transform = CGAffineTransform.identity
+        })
+    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -76,13 +66,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             data.remove(at: indexPath.row)
             data.insert(item, at: 0)
             
-            tableView.performBatchUpdates({
-                tableView.moveRow(at: indexPath, to: IndexPath(row: 0, section: 0))
-            }) { _ in
-                tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-            }
+            
+            tableView.moveRow(at: indexPath, to: IndexPath(row: 0, section: 0))
+            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
         } else {
-            tableView.reloadRows(at: [indexPath], with: .automatic)
+            tableView.reloadRows(at: [indexPath], with: .none)
         }
     }
     
