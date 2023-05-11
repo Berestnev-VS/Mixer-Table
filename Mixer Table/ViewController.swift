@@ -8,7 +8,7 @@
 import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     var tableView: UITableView!
     var data: [(Int, Bool)] = []
     let cellIdentifier = "Cell"
@@ -29,15 +29,23 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @objc func shuffleData() {
         data.shuffle()
-        tableView.reloadData()
+        tableView.performBatchUpdates({
+            let indexPaths = tableView.indexPathsForVisibleRows ?? []
+            for indexPath in indexPaths {
+                tableView.reloadRows(at: [indexPath], with: .automatic)
+            }
+        })
     }
-
+    
     // MARK: - UITableViewDataSource
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
-
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         let (number, isChecked) = data[indexPath.row]
@@ -45,16 +53,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.accessoryType = isChecked ? .checkmark : .none
         return cell
     }
-
+    
     // MARK: - UITableViewDelegate
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         var item = data[indexPath.row]
         item.1.toggle()
         data[indexPath.row] = item
-
+        
         if item.1 {
             data.remove(at: indexPath.row)
             data.insert(item, at: 0)
@@ -68,7 +76,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
-
+    
 }
 
 
