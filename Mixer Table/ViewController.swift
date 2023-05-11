@@ -53,7 +53,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         var item = data[indexPath.row]
         item.1.toggle()
-        print(item.0, item.1)
         data[indexPath.row] = item
 
         if item.1 {
