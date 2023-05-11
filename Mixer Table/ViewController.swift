@@ -56,6 +56,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // MARK: - UITableViewDelegate
     
+    /*
+     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+     cell.transform = CGAffineTransform(scaleX: 0, y: 0)
+     UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+     cell.transform = CGAffineTransform.identity
+     }, completion: nil)
+     }
+     */
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
